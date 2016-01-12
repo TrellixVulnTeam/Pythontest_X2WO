@@ -1,0 +1,30 @@
+*** Settings ***
+Force Tags        Selenium_test
+Default Tags      Selenium
+Resource          流程关键字.txt
+Resource          Keywords.txt
+
+*** Test Cases ***
+TC001_OpenBrowser
+    [Documentation]    使用Selenium进行验收测试
+    Import Variables    ${CURDIR}/var.py
+    搜索关键字    ${testURL}    ${searchText}
+
+TC001_OpenBrowser2
+    [Documentation]    使用Selenium进行验收测试
+    搜索关键字    http://www.baidu.com    selenium
+
+TC002_test_keyword
+    关键字测试    111    222    333    444
+    log    ${arg1}
+
+TC003
+    ${cookie}    user login and get cookie for Android    @{LoginUserInfo}[0]    @{LoginUserInfo}[1]
+    create usual web request header for Android    ${cookie}    gzip,deflate
+    set request body    orderSn=1001140000000000123
+    POST    /webapp/shihuaICBenefit/recheckCompany
+    ${responseString}    get response body
+    ${decodeJson}    decode gzip string    ${responseString}
+    log    ${decodeJson}
+    assert code pass 00000    ${decodeJson}
+    user logout for Android    ${cookie}

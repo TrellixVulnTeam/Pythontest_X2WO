@@ -1,0 +1,413 @@
+*** Settings ***
+Documentation     关键字说明：
+...
+...               关键字内容带web的都是response内容是html的关键字。不带web的或者带json的是对response是json的处理。
+Resource          Vars.txt
+Library           HttpLibrary.HTTP
+Library           SCTestLib
+Library           DatabaseLibrary
+Library           String
+
+*** Keywords ***
+accept Chinese
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月20日12:00
+    ...
+    ...    Common:支持中文输入输出。
+    Evaluate    reload(sys)    sys
+    Evaluate    sys.setdefaultencoding('utf-8')    sys
+
+decode gzipped json
+    [Arguments]    ${responsString}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月20日12:00
+    ...
+    ...    Common:解压缩返回的Gzip json，并获取到返回的code。
+    ...
+    ...    args:
+    ...    ${responseString} 返回的gzip string。
+    ...
+    ...    return:
+    ...    ${decodedString} 解GZIPED string。
+    ${decodedString}    decode gzip string    ${responsString}
+    Should Be Valid Json    ${decodedString}
+    [Return]    ${decodedString}
+
+get resp body
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月20日12:00
+    ...
+    ...    Common:断言response状态是不是200OK。如果是，返回response body。
+    ...
+    ...    args:
+    ...    无。
+    ...
+    ...    return value：
+    ...    ${responseString} 响应的body内容。
+    Response Status Code Should Equal    200
+    ${responsString}    get response body
+    [Return]    ${responsString}
+
+get decoded response body
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月20日12:00
+    ...
+    ...    Common:创建一个http上下文，并设置常用的headers。精简代码，方便脚本编写，且脚本可读性更高。
+    ...
+    ...    args:
+    ...    无。
+    ...
+    ...    return value：
+    ...    ${resBody} 解压后的body值。
+    ${resbodyGzipped}    get resp body
+    ${resBody}    decode gzip string    ${resbodyGzipped}
+    [Return]    ${resBody}
+
+assert code pass 00000
+    [Arguments]    ${decodedString}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月20日12:00
+    ...
+    ...    Common:断言返回的json的code是不是00000，正确状态。
+    ${resCode}    Get Json Value    ${decodedString}    /code
+    Should be equal    ${resCode}    "00000"
+
+assert code error 10000
+    [Arguments]    ${decodedString}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月20日12:00
+    ...
+    ...    Common: 断言json的code是10000错误。
+    ${resCode}    Get Json Value    ${decodedString}    /code
+    Should be equal    ${resCode}    "10000"
+
+assert code error 10001
+    [Arguments]    ${decodedString}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月20日12:00
+    ...
+    ...    Common: 断言json的code是10000错误。
+    ${resCode}    Get Json Value    ${decodedString}    /code
+    Should be equal    ${resCode}    "10001"
+
+assert code error 20000
+    [Arguments]    ${decodedString}
+    ${resCode}    Get Json Value    ${decodedString}    /code
+    Should be equal    ${resCode}    "20000"
+
+assert web title
+    [Arguments]    ${responseBody}    ${pagetitle}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月20日12:00
+    ...
+    ...    Common:断言返回html页面的标题
+    Should Contain    ${responseBody}    <title>${pagetitle}</title>
+
+get decoded response web page
+    [Arguments]    ${responsString}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月20日12:00
+    ...
+    ...    Common:得到web的解码。
+    ${decodedString}    decode gzip string    ${responsString}
+    [Return]    ${decodedString}
+
+assert juao status pass
+    [Arguments]    ${decodedString}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月20日12:00
+    ...
+    ...    Common:断言返回的json的status是不是0，正确状态。聚奥商城接口返回状态判断。
+    ${resStatus}    Get Json Value    ${decodedString}    /status
+    Should be equal    ${resStatus}    0
+
+connect to MySQLdb
+    [Arguments]    @{MYSQL_CONFIG_INFOS}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月25日16:06
+    ...
+    ...    Common:链接到数据库。
+    Connect To Database    @{MYSQL_CONFIG_INFOS}[0]    @{MYSQL_CONFIG_INFOS}[1]    @{MYSQL_CONFIG_INFOS}[2]    @{MYSQL_CONFIG_INFOS}[3]    @{MYSQL_CONFIG_INFOS}[4]    @{MYSQL_CONFIG_INFOS}[5]
+
+close mysql connection
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月25日16:06
+    ...
+    ...    Common:断开mysql链接。
+    Disconnect From Database
+
+get verify code
+    [Arguments]    ${mobile}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月25日16:06
+    ...
+    ...    Common:得到验证码。
+    connect to MySQLdb    @{MySQL_CONFIG}
+    @{queryRes}    Query    SELECT code FROM cyVerifyCode WHERE mobile="${mobile}"
+    @{Res1}    set variable    @{queryRes}[0]
+    ${verifyCode}    set variable    @{Res1}
+    close mysql connection
+    [Return]    ${verifyCode}
+
+get json value string
+    [Arguments]    ${decodedString}    ${path}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月25日16:06
+    ...
+    ...    Common: 得到json的路径值，并去掉双引号。
+    ${getValue}    Get Json Value    ${decodedString}    ${path}
+    ${retStr}    remove double quote    ${getValue}
+    [Return]    ${retStr}
+
+get sessionId from cookie
+    [Arguments]    ${cookie}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月25日16:06
+    ...
+    ...    Common:得到sessionID从cookie中。
+    @{getArrs}    split string    ${cookie}    ;
+    @{getArrs2}    split string    @{getArrs}[0]    =
+    ${sessionId}    set variable    @{getArrs2}[1]
+    [Return]    ${sessionId}
+
+user login and get cookie for Android
+    [Arguments]    ${username}    ${password}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月20日12:00
+    ...
+    ...    Common:用户登陆并得到cookie。
+    accept Chinese
+    create http context    host=${TestHost}    scheme=http
+    set request header    Content-Type    ${ContentType}
+    set request header    Host    ${TestHost}
+    set request header    Connection    Keep-Alive
+    set request header    User-Agent    ${UserAgentForAndroid}
+    set request header    Accept-Encoding    gzip
+    set request body    CyLoginForm%5Bclient%5D=android&CyLoginForm%5Bpassword%5D=${password}&CyLoginForm%5BrememberMe%5D=1&CyLoginForm%5Busername%5D=${username}&companyKey=${companyKey}&https=0&ajax=1&CyLoginForm%5BdeviceToken%5D=Aj85ya-sggCZubMZ8ofI-AF3Qk_qFCrBkLYwf50Cwg3q
+    POST    /api/user/shihuaAppLogin
+    ${responsString}    get resp body
+    ${resCode}    decode gzipped json    ${responsString}
+    assert code pass 00000    ${resCode}
+    @{cookieList}    Get Response Header    set-cookie
+    ${SessId}    Get Substring    @{cookieList}[1]    0    -7
+    ${cookie}    set variable    ${SessId} @{cookieList}[2]
+    [Return]    ${cookie}
+
+create usual http header for Android
+    [Arguments]    ${cookie}    ${accEncoding}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月20日12:00
+    ...
+    ...    Common:创建一个http上下文，并设置常用的headers。精简代码，方便脚本编写，且脚本可读性更高。
+    ...
+    ...    args:
+    ...    ${tHost} 主机地址或域名。
+    ...    ${contType} header content-type的值。
+    ...    ${uAgent} header User-Agent的值。
+    ...    ${cookie} cookie值。
+    ...    ${accEncoding} 编码值。
+    ...
+    ...    return value：
+    ...    无。
+    create http context    host=${TestHost}    scheme=http
+    set request header    Content-Type    ${ContentType}
+    set request header    Host    ${TestHost}
+    set request header    Connection    Keep-Alive
+    set request header    User-Agent    ${UserAgentForAndroid}
+    set request header    Cookie2    $Version=1
+    set request header    Cookie    ${cookie}
+    set request header    Accept-Encoding    ${accEncoding}
+
+create usual web request header for Android
+    [Arguments]    ${cookie}    ${accEncoding}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月20日12:00
+    ...
+    ...    Common:创建一个返回是html的http请求。
+    create http context    host=${TestHost}    scheme=http
+    set request header    Host    ${TestHost}
+    set request header    Connection    Keep-Alive
+    set request header    Accept    text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+    set request header    User-Agent    ${UserAgentForWeb}
+    set request header    Accept-Encoding    ${accEncoding}
+    set request header    Accept-Language    zh-CN,en-US;q=0.8
+    set request header    Cookie    ${cookie}
+    set request header    X-Requested-With    com.shuchuang.shihua
+
+user logout for Android
+    [Arguments]    ${cookie}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月20日12:00
+    ...
+    ...    Common:用户登出。
+    create http context    host=${TestHost}    scheme=http
+    create usual http header for Android    ${cookie}    gzip
+    set request body    ${CommonArgs}
+    POST    /api/user/logout
+    ${responsString}    get resp body
+    ${resCode}    decode gzipped json    ${responsString}
+    assert code pass 00000    ${resCode}
+
+send verify code for Android
+    [Arguments]    ${cookie}    ${mobile}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年11月25日16:06
+    ...
+    ...    Common:发送验证码。
+    create http context    host=${TestHost}    scheme=http
+    set request header    Content-Type    ${ContentType}
+    set request header    Host    ${TestHost}
+    set request header    Connection    Keep-Alive
+    set request header    User-Agent    ${UserAgentForAndroid}
+    set request header    Cookie2    $Version=1
+    set request header    Cookie    ${cookie}
+    set request header    Accept-Encoding    gzip
+    set request body    mob=${mobile}&retry=0&${CommonArgs}
+    POST    /verifyCode/sendVerifyCode
+    ${responsString}    get resp body
+    ${decodeString}    decode gzipped json    ${responsString}
+    assert code pass 00000    ${decodeString}
+
+create usual http header for IOS
+    [Arguments]    ${cookie}    ${accEncoding}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年12月1日
+    ...
+    ...    Common:创建http请求for IOS。
+    create http context    host=${TestHost}    scheme=http
+    set request header    Content-Type    ${ContentType}
+    set request header    Host    ${TestHost}
+    set request header    Connection    Keep-Alive
+    set request header    User-Agent    ${UserAgentForIOS}
+    set request header    Cookie2    $Version=1
+    set request header    Cookie    ${cookie}
+    set request header    Accept-Encoding    ${accEncoding}
+    set request header    Accept    */*
+    set request header    Accept-Language    zh-Hans;q=1, en;q=0.9
+
+user login and get cookie for IOS
+    [Arguments]    ${username}    ${password}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年12月1日
+    ...
+    ...    Common：用户登录获取cookie for IOS。
+    accept Chinese
+    create http context    host=${TestHost}    scheme=http
+    set request header    Content-Type    ${ContentType}
+    set request header    Host    ${TestHost}
+    set request header    Connection    Keep-Alive
+    set request header    User-Agent    ${UserAgentForIOS}
+    set request header    Accept-Encoding    gzip
+    set request body    CyLoginForm%5Bclient%5D=android&CyLoginForm%5Bpassword%5D=${password}&CyLoginForm%5BrememberMe%5D=1&CyLoginForm%5Busername%5D=${username}&companyKey=${companyKey}&https=0&ajax=1&CyLoginForm%5BdeviceToken%5D=Aj85ya-sggCZubMZ8ofI-AF3Qk_qFCrBkLYwf50Cwg3q
+    POST    /api/user/shihuaAppLogin
+    ${responsString}    get resp body
+    ${resCode}    decode gzipped json    ${responsString}
+    assert code pass 00000    ${resCode}
+    @{cookieList}    Get Response Header    set-cookie
+    ${SessId}    Get Substring    @{cookieList}[1]    0    -7
+    ${cookie}    set variable    ${SessId} @{cookieList}[2]
+    [Return]    ${cookie}
+
+user logout for IOS
+    [Arguments]    ${cookie}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年12月1日
+    ...
+    ...    Common:用户退出for IOS。
+    create http context    host=${TestHost}    scheme=http
+    create usual http header for IOS    ${cookie}    gzip
+    set request body    ${CommonArgs}
+    POST    /api/user/logout
+    ${responsString}    get resp body
+    ${resCode}    decode gzipped json    ${responsString}
+    assert code pass 00000    ${resCode}
+
+send verify code for IOS
+    [Arguments]    ${cookie}    ${mobile}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年12月1日
+    ...
+    ...    Common:发送验证码for IOS。
+    create http context    host=${TestHost}    scheme=http
+    set request header    Content-Type    ${ContentType}
+    set request header    Host    ${TestHost}
+    set request header    Connection    Keep-Alive
+    set request header    User-Agent    ${UserAgentForIOS}
+    set request header    Cookie2    $Version=1
+    set request header    Cookie    ${cookie}
+    set request header    Accept-Encoding    gzip
+    set request body    mob=${mobile}&retry=0&${CommonArgs}
+    POST    /verifyCode/sendVerifyCode
+    ${responsString}    get resp body
+    ${decodeString}    decode gzipped json    ${responsString}
+    assert code pass 00000    ${decodeString}
+
+create usual web request header for IOS
+    [Arguments]    ${cookie}    ${accEncoding}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年12月1日
+    ...
+    ...    Common:创建http web 请求for ios。
+    create http context    host=${TestHost}    scheme=http
+    set request header    Host    ${TestHost}
+    set request header    Connection    Keep-Alive
+    set request header    Accept    text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+    set request header    User-Agent    ${UserAgentForWebIOS}
+    set request header    Accept-Encoding    ${accEncoding}
+    set request header    Accept-Language    zh-cn
+    set request header    Cookie    ${cookie}
+
+get userid by mob
+    [Arguments]    ${mob}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年12月1日
+    ...
+    ...    Common:得到userId通过电话号码。
+    connect to MySQLdb    @{MySQL_CONFIG}
+    @{queryRes}    Query    select userId from cyUser where mob="${mob}"
+    @{Res1}    set variable    @{queryRes}[0]
+    ${userId}    set variable    @{Res1}
+    close mysql connection
+    [Return]    ${userId}
+
+get value by sql
+    [Arguments]    ${sql}
+    [Documentation]    Author:王吉亮
+    ...
+    ...    CreateData:2015年12月1日
+    ...
+    ...    Common:通过sql语句查询需要的值，这个值只能是单一的，sql语句必须如下：
+    ...    select userId from cyUser where mob="18601052628"
+    ...    查询的结果必须是唯一的。
+    connect to MySQLdb    @{MySQL_CONFIG}
+    @{queryRes}    Query    ${sql}
+    @{Res1}    set variable    @{queryRes}[0]
+    ${result}    set variable    @{Res1}
+    close mysql connection
+    [Return]    ${result}
