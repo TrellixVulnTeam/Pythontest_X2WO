@@ -1,2 +1,2 @@
 # Pythontest
-python teset
+python test
