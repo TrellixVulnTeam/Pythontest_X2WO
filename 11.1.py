@@ -16,5 +16,3 @@ elif x < 0:
     print('该值是小于零的值')
 else:
     print('该值等于0')
-
- 
