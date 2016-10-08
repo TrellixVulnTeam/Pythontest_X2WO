@@ -1,8 +1,5 @@
-print 'hello world'
-print 'hello again'
-print 'I like type this'
-print 'This is fun'
-print 'Yay! Printing.'
-print "I'd much rather you 'not'."
-print 'I "said" do not touch this.'
-print
+import datetime
+
+days = lambda year, month, day: (datetime.date.today()-datetime.date(year,month,day)).days
+
+print(days(1990,8,16))
