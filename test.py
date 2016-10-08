@@ -1,19 +1,13 @@
 #!/usr/bin/env/python
 # -*- coding: utf-8 -*-
-####################
-#文本菜单程序，(1)手动输入五个数，求五个数的和(2)求五个数的平均值(X)退出。
-####################
-def sort_nums(x, y, z):
-    for i in range(2):
-        if x < y:
-            x, y = y, x
-        if y < z:
-            y, z = z, y
-    print(x, y, z)
-if __name__ == '__main__':
-    sort_nums(1, 2, 3)
-    sort_nums(2, 1, 3)
-    sort_nums(1, 3, 2)
-    sort_nums(3, 1, 2)
-    sort_nums(3, 2, 1)
-    sort_nums(2, 3, 1)
+import requests
+import bs4
+result = requests.get('http://www.sooxue.com/gaokao/yxdm/xj.html')
+string = result.content.decode('gbk', 'ignore')
+soup = bs4.BeautifulSoup(string, 'html.parser')
+school_list = []
+for i in soup.findAll('p'):
+	school_list.append((i.get_text().split(' ')[0], i.get_text().split(' ')[1], 31))
+
+with open('school.txt', 'w', encoding='utf-8') as f:
+	f.write(str(school_list))
