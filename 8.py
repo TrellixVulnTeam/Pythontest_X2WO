@@ -6,3 +6,9 @@
 for readline in open('books.xml'):
 	print(readline)
 
+for readline in open('make.txt'):
+    print(readline)
+
+
+for i in range(3):
+  	print(i)

@@ -5,7 +5,6 @@
 ####################
 import os
 print('Hello World!')
-from file.login import *
-print(name)
+
 
 print(os.path.realpath(__file__))
