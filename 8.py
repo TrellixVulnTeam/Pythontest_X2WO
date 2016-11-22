@@ -6,7 +6,7 @@
 for readline in open('books.xml'):
 	print(readline)
 
-for readline in open('make.txt'):
+for readline in open('make.txt', encoding='utf-8'):
     print(readline)
 
 
