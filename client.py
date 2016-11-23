@@ -1,8 +1,23 @@
-# -*- coding: utf-8 -*-
-import socket
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-host = socket.gethostname()
-port = 1234
-s.connect((host, port))
-print(s.recv(1024).decode())
-s.close()
+#!/usr/bin/env python
+
+from socket import *
+
+HOST = '127.0.0.1'
+PORT = 50003
+BUFSIZE = 1024
+ADDR = (HOST, PORT)
+
+tcpClientSock = socket(AF_INET, SOCK_STREAM)
+tcpClientSock.connect(ADDR)
+
+while True:
+    data = input('>')
+    if not data:
+        break
+    tcpClientSock.send(data.encode())
+    data = tcpClientSock.recv(BUFSIZE).decode()
+    if not data:
+        break
+    print(data)
+
+tcpClientSock.close()
