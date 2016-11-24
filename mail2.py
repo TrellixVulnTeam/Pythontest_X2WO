@@ -28,7 +28,7 @@ def main():
     msg.attach(MIMEText(content))
 
     print(msg)
-    smtp.sendmail(user,to,msg.as_string())
+    smtp.sendmail(user, to, msg.as_string())
     smtp.quit()
 
 if __name__ == '__main__':
