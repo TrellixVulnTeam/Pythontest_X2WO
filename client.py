@@ -4,7 +4,7 @@ from socket import *
 
 HOST = '127.0.0.1'
 PORT = 50003
-BUFSIZE = 1024
+BUFSIZE = 2048
 ADDR = (HOST, PORT)
 
 tcpClientSock = socket(AF_INET, SOCK_STREAM)
