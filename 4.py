@@ -8,3 +8,6 @@ print('Hello World!')
 
 
 print(os.path.realpath(__file__))
+with open('4.txt', 'a') as f:
+    f.write(os.path.realpath(__file__)+'\n')
+    f.writelines('Hello'+'\n')
