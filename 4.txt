@@ -1,0 +1,12 @@
+2016-12-02 09:37:04 D:\pythontest\4.py
+Hello
+2016-12-02 09:38:49 D:\pythontest\4.py
+Hello
+2016-12-02 09:40:43 D:\pythontest\4.py
+Hello
+2016-12-02 11:13:06 D:\pythontest\4.py
+Hello
+2016-12-02 11:13:33 D:\pythontest\4.py
+Hello
+2016-12-02 16:29:20 D:\pythontest\4.py
+Hello
