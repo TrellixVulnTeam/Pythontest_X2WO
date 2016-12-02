@@ -1,6 +1,6 @@
 # coding: utf-8
 # file operating
-f = open('hello_world.py', 'r')
+f = open('hello_world.py', 'r', encoding='utf-8')
 s1 = f.readline()	# 读取了第一句
 s2 = f.readline()	# 读取了第二句
 print(s1)
