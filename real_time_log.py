@@ -16,6 +16,19 @@ def follow(thefile):
             continue
         yield line
 
+def follow_bak(thefile):
+    """ 备份函数，没有使用yield"""
+    thefile.seek(0,2)
+    while True:
+        current_position = thefile.tell()   # 利用tell读取当前位置
+        line = thefile.readline()
+        if line:
+            print(line)
+        else:
+            thefile.seek(current_position)  # 如果没有读取到新数据，就使用seek锁定当前位置
+            time.sleep(0.1)
+
+
 if __name__ == '__main__':
     try:
         logfile = open("/usr/local/tomcat7_rqt/logs/catalina.out")
