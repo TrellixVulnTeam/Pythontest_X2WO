@@ -4,6 +4,7 @@
 
 """
 import time
+import subprocess
 def follow(thefile):
     thefile.seek(0, 2)  # seek第一个参数表示当前行从第几个字符开始读取到最后一个字符，
     # 填0表示从第0个字符到该行最后一个字符，填10就表示从当前行第十个字符开始读取到当前行
@@ -28,6 +29,13 @@ def follow_bak(thefile):
             thefile.seek(current_position)  # 如果没有读取到新数据，就使用seek锁定当前位置
             time.sleep(0.1)
 
+def follow_sub(thefile):
+    p = subprocess.Popen('tail -f ' + thefile, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,)
+    while True:
+        line = p.stdout.readline()
+        if line:
+            print(line)     # 打印出来的是二进制字节码，需要解码
+            print(line.decode())
 
 if __name__ == '__main__':
     try:
