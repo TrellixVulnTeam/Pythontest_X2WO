@@ -1,5 +1,6 @@
 import requests
-url_list = ['http://dz.yteu.biz/thread0806.php?fid=22&search=&page='+str(i)  for i in range(2,10)]
+url_list = ['http://dz.yteu.biz/thread0806.php?fid=22&search=&page='+str(i)  for i in range(2,100)]
+# url_list = ['http://dz.yteu.biz/thread0806.php?fid=21&search=&page='+str(i)  for i in range(2,100)]
 url_list.insert(0, 'http://dz.yteu.biz/thread0806.php?fid=22')
 
 # print(url_list)
@@ -7,7 +8,7 @@ for url in url_list:
     r = requests.get(url)
     print(r.encoding)
     # print(r.content.decode('gbk'))
-    text = r.content.decode('gbk')
+    text = r.content.decode('gbk', 'ignore')
     with open('test_request.txt', 'a',encoding='utf-8') as f:
         f.write(text)
 
