@@ -3,10 +3,16 @@
 ####################
 #编写一个脚本，在屏幕上显示你的名字、年龄、最喜欢的颜色，兴趣爱好等等
 ####################
-print('      嗨，大家好\n\
-      我叫张三\n\
-      我的年龄是18岁\n\
-      我最喜欢的颜色是蓝色\n\
-      喜欢Python编程语言\n\
-      喜欢自行车\n\
-      喜欢读书\n')
+#for line in open('4.txt'):
+#	print(line)
+
+from turtle import *
+color('red', 'yellow')
+begin_fill()
+while True:
+	forward(200)
+	left(170)
+	if abs(pos()) < 1:
+		break
+end_fill()
+done()
