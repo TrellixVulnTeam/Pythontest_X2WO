@@ -33,9 +33,9 @@ def saveImage_with_urllib(result):
     #     if not img.startswith('http://'):
     #         imglist.remove(img)
     #   如果图片地址不是以http://开头就添加域名
-    for img in imglist:
-        if not img.startswith('http://'):
-            imglist[imglist.index(img)] = 'http://www.cnblogs.com' + img
+    # for img in imglist:
+    #     if not img.startswith('http://'):
+    #         imglist[imglist.index(img)] = 'http://www.cnblogs.com' + img
     # print(imglist)
     for img in imglist:
         if img.endswith('png'):
@@ -48,5 +48,6 @@ def saveImage_with_urllib(result):
             urllib.request.urlretrieve(img, "D:\\%s.gif"%imglist.index(img))
 
 html = getResult('http://www.cnblogs.com/fnng/p/3576154.html')
+
 saveImage_with_urllib(html)
 
