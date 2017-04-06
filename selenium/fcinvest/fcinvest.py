@@ -12,8 +12,8 @@ class Fcinvest(unittest.TestCase):
         # self.driver.maximize_window()
         self.verificationErrors = []
         self.driver.get(self.base_url)
-        self.driver.find_element_by_id("txtusername").send_keys('zhanhezou')
-        self.driver.find_element_by_id("txtpw").send_keys('895544zhan')
+        self.driver.find_element_by_id("txtusername").send_keys('username')
+        self.driver.find_element_by_id("txtpw").send_keys('password')
         time.sleep(20)
         self.driver.find_element_by_id("btnsubmit").click()
         time.sleep(3)
@@ -88,4 +88,7 @@ class Fcinvest(unittest.TestCase):
         self.assertEqual([], self.verificationErrors)
 
 if __name__ == "__main__":
+    # if len(sys.argv)<3:
+    #     print('请输入用户名和密码并重新执行')
+    #     sys.exit(0)
     unittest.main()
