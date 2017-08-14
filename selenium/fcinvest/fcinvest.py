@@ -39,10 +39,10 @@ class Fcinvest(unittest.TestCase):
         # 下行与上行效果相同，用于选择活动钱包
         # driver.find_element_by_xpath(".//*[@id='activitywallet']").click()
         times = ('2', '6', '18', '54', '162', '486', '1458', '4374', '13122', '39366', '118098', '354294', '1062882', '3188646', '9565938', '28697814', '86093442', '258280326', '774840978')
-        while True:
+        # while True:
         # 中奖次数是2时就退出程序
-        # cishu = 0
-        # while cishu < 2:
+        cishu = 0
+        while cishu < 5:
             for beishu in times:
                 # 循环执行投注
                 driver.find_element_by_xpath("//ul[@id='dwwanwei']/li[3]/span").click()
@@ -79,7 +79,7 @@ class Fcinvest(unittest.TestCase):
                     print("\033[7;32;40m%s\033[0m" % '没中奖')
                     driver.find_element_by_xpath(".//*[@id='tomultiple']").clear()
                     driver.find_element_by_xpath(".//*[@id='tomultiple']").send_keys(beishu)
-            # cishu += 1
+            cishu += 1
         time.sleep(10)
 
 
