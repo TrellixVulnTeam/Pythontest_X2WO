@@ -7,7 +7,7 @@ msg = MIMEText('hello, send by Python...', 'plain', 'utf-8')
 sender = 'me@zhanxueyou.me'
 password = '895544Zhanxueyou'
 
-receiver = 'zhanxueyou@rqbao.com'
+receiver = 'zhanxueyou@chainup.com'
 
 smtp_server = 'smtp.exmail.qq.com'
 smtp_port = 25
