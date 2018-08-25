@@ -6,10 +6,8 @@ from email.header import Header
 smtp_host = 'smtp.exmail.qq.com'
 sender = 'me@zhanxueyou.me'
 receiver = 'zhanxueyou@126.com'
-
 user = 'me@zhanxueyou.me'
 password = '895544Zhanxueyou'
-
 subject = 'python email test'
 
 
