@@ -19,7 +19,7 @@ def notify_error(info):
     'port': 465
     }
 
-    subject = '验证测试错误'
+    subject = '测试验证错误'
     msg = MIMEText(info, 'text', 'utf-8')
     msg['Subject'] = Header(subject, 'utf-8')
 
