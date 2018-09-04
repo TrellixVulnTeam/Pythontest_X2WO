@@ -5,7 +5,7 @@ import smtplib
 msg = MIMEText('hello, send by Python...', 'plain', 'utf-8')
 
 sender = 'me@zhanxueyou.me'
-password = '895544Zhanxueyou'
+password = ''
 
 receiver = 'zhanxueyou@chainup.com'
 
