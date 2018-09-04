@@ -7,7 +7,7 @@ from email.mime.text import MIMEText
 host = 'smtp.exmail.qq.com'
 port = 25
 user = 'me@zhanxueyou.me'
-password = '895544Zhanxueyou'
+password = ''
 recv = 'zhanxueyou@rqbao.com'
 
 def main():

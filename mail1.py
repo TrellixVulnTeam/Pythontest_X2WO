@@ -8,7 +8,7 @@ smtp_host = 'smtp.exmail.qq.com'
 sender = 'me@zhanxueyou.me'
 receiver = 'zhanxueyou@chainup.com'
 user = 'me@zhanxueyou.me'
-password = '895544Zhanxueyou'
+password = ''
 subject = 'python email test测试验证报错'
 
 
