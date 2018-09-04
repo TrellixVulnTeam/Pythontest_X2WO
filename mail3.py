@@ -14,9 +14,9 @@ def notify_error(info):
     'smtp_host': 'smtp.exmail.qq.com',
     'sender': 'tools@chainup.com',
     'receiver': 'zhanxueyou@chainup.com',
-    'user': 'tools@chainup.com',
-    'password': '23BejmSZBSwHx2vA',
-    'port': 465
+    'user': '',
+    'password': '',
+    'port': 
     }
 
     subject = '测试验证错误'
