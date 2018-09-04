@@ -6,7 +6,7 @@ from email.header import Header
 smtp_host = 'smtp.exmail.qq.com'
 # smtp_port = 25
 sender = 'me@zhanxueyou.me'
-receiver = 'zhanxueyou@chainup.com'
+receiver = 'zhanxueyou@xxx.com'
 user = 'me@zhanxueyou.me'
 password = ''
 subject = 'python email test测试验证报错'

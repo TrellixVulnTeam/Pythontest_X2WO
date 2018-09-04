@@ -12,8 +12,8 @@ def notify_error(info):
     '''
     mail_conf = {
     'smtp_host': 'smtp.exmail.qq.com',
-    'sender': 'tools@chainup.com',
-    'receiver': 'zhanxueyou@chainup.com',
+    'sender': 'tools@xxx.com',
+    'receiver': 'zhanxueyou@xxx.com',
     'user': '',
     'password': '',
     'port': 
