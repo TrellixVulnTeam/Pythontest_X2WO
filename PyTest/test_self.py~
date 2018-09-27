@@ -1,0 +1,23 @@
+__author__ = 'Administrator'
+
+from selenium import webdriver
+from selenium import selenium
+from selenium.webdriver.common.keys import Keys
+import unittest
+import re
+
+
+class TestLoginJump(unittest.TestCase):
+    """测试登录的跳转是否正常
+
+    """
+    def test_login(self):
+        browser = webdriver.Chrome()
+        browser.get('http://test.www.999ask.com')
+        browser.find_element_by_xpath("//div[@class='top1_1']/a[1]").click()
+        browser.back()
+        browser.quit()
+
+
+if __name__ == "__main__":
+    unittest.main()
