@@ -13,6 +13,6 @@ file_again = input('> ')
 
 txt_again = open(file_again, encoding='utf-8')
 
-print(txt_again.read())
+print(txt_again.readlines())
 txt_again.close()
 
